@@ -1,0 +1,4 @@
+A collection of simple helpers for laptops with Ubuntu
+
+ * wake_up - use the BIOS real time clock to schedule a wakeup time, then play music etc
+ * adjust-brightness - adjust LCD backlight brightness in arbitrarily coarse levels (saves hitting the buttons 20 times)

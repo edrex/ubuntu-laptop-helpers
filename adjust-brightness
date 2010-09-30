@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+from sys import argv
+import dbus
+
+try:
+  dl = int(argv[1])
+except:
+  print "invalid increment"
+  raise
+
+bus=dbus.SessionBus()
+proxy=bus.get_object('org.gnome.PowerManager','/org/gnome/PowerManager/Backlight')
+
+cl = int(proxy.GetBrightness(dbus_interface='org.gnome.PowerManager.Backlight'))
+proxy.SetBrightness(dbus.UInt32(cl + dl), dbus_interface='org.gnome.PowerManager.Backlight')
+

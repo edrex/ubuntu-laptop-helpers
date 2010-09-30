@@ -1,0 +1,7 @@
+This can be rewritten to use DBUS and python
+
+ * dbus sleep
+ * dbus set wakeup time (?)
+ * dbus notify on resume
+
+also, should check to see if alarm time is reached yet before exiting
