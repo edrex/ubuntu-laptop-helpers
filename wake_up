@@ -3,5 +3,5 @@
 echo 0 > /sys/class/rtc/rtc0/wakealarm
 echo `date "+%s" -d "$1"` > /sys/class/rtc/rtc0/wakealarm
 sleep 1
-echo "3" >/proc/acpi/sleep
+/etc/acpi/sleep.sh sleep
 sleep 10
