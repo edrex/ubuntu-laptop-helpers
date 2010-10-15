@@ -3,5 +3,13 @@
 echo 0 > /sys/class/rtc/rtc0/wakealarm
 echo `date "+%s" -d "$1"` > /sys/class/rtc/rtc0/wakealarm
 sleep 1
-/etc/acpi/sleep.sh sleep
+# various sleep commands
+# see http://www.uluga.ubuntuforums.org/showthread.php?t=813387&page=5
+# bad Ubuntu! Provide consistent interfaces for important components like power!
+# lucid+
+#dbus-send --print-reply --system --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend
+# fairly portable
+#/etc/acpi/sleep.sh sleep
+# some weird cases
+echo "mem"> /sys/power/state
 sleep 10
