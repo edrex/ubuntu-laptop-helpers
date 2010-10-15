@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+import dbus
+bus=dbus.SessionBus()
+proxy=bus.get_object('org.gnome.PowerManager','/org/gnome/PowerManager/Backlight')
+
+cl = int(proxy.GetBrightness(dbus_interface='org.gnome.PowerManager.Backlight'))
+
+if cl < 80:
+    nl = cl+34
+else:
+    nl = 0L
+
+proxy.SetBrightness(dbus.UInt32(nl), dbus_interface='org.gnome.PowerManager.Backlight')
+
