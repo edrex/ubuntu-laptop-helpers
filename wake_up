@@ -1,15 +1,78 @@
 #!/bin/sh
 
-echo 0 > /sys/class/rtc/rtc0/wakealarm
-echo `date "+%s" -d "$1"` > /sys/class/rtc/rtc0/wakealarm
-sleep 1
+usage()
+{
+cat << EOF
+usage: $0 options
+
+Wake up the computer at the given time using the ACPI RTC interface
+Run a command 2 minutes later.
+Optionally go to sleep now.
+
+OPTIONS:
+   -h         Show this message
+   -s         Sleep now
+   -w [time]  Wake at specified time
+EOF
+}
+
+# bleah
+WAKETIME=$1
+if [ "$2" ]
+then
+  SLEEP=1
+  SLEEPTIME=$2
+fi
+
+while getopts  "s:w:" flag
+do
+     case $OPTION in
+         h)
+             usage
+             exit 1
+             ;;
+         s)
+             SLEEP=1
+	     SLEEPTIME=$OPTARG
+             ;;
+	 w)
+	     WAKETIME=$OPTARG
+echo opt: $OPTARG
+	     ;;
+         ?)
+             usage
+             exit
+             ;;
+     esac
+done
+
+if [ -z "$WAKETIME" ]
+then
+     usage
+     exit 1
+fi
+
+echo 0 | sudo tee /sys/class/rtc/rtc0/wakealarm
+echo `date "+%s" -d "$WAKETIME"` | sudo tee /sys/class/rtc/rtc0/wakealarm
+# PLAYCMD="banshee --play"
+PLAYCMD="rhythmbox-client --next"
+echo "$PLAYCMD" | at $WAKETIME + 2 minutes
+
 # various sleep commands
 # see http://www.uluga.ubuntuforums.org/showthread.php?t=813387&page=5
 # bad Ubuntu! Provide consistent interfaces for important components like power!
-# lucid+
-#dbus-send --print-reply --system --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend
+# lucid+, non-root
+SLEEPCMD="dbus-send --print-reply --system --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend"
 # fairly portable
 #/etc/acpi/sleep.sh sleep
 # some weird cases
-echo "mem"> /sys/power/state
-sleep 10
+# echo "mem"> /sys/power/state
+if [ "$SLEEP" ]
+then
+  if [ "$SLEEPTIME" ]
+  then
+    echo "$SLEEPCMD" | at now + "$SLEEPTIME"
+  else
+    $SLEEPCMD
+  fi
+fi
