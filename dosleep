@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# wrapper around various sleep commands
+# see http://www.uluga.ubuntuforums.org/showthread.php?t=813387&page=5
+# lucid+, non-root
+# this should be a big case statement checking specific features/distribution versions
+
+SLEEPCMD="dbus-send --print-reply --system --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend"
+#/etc/acpi/sleep.sh sleep
+$SLEEPCMD

@@ -1,0 +1,6 @@
+#!/bin/sh
+# simple RTC wake interface wrapper
+
+# clear the alarm
+sudo sh -c "echo 0 > /sys/class/rtc/rtc0/wakealarm;
+echo `date '+%s' -d $1` > /sys/class/rtc/rtc0/wakealarm"

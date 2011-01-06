@@ -31,7 +31,7 @@ sudo sh -c 'echo 0 > /sys/class/rtc/rtc0/wakealarm;
 echo `date "+%s" -d "$WAKETIME"` > /sys/class/rtc/rtc0/wakealarm'
 
 # PLAYCMD="banshee --play"
-PLAYCMD="rhythmbox-client --play --next"
+PLAYCMD="rhythmbox-client --play"
 echo "$PLAYCMD" | at $WAKETIME + 2 minutes
 
 # various sleep commands
