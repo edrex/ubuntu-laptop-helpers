@@ -3,11 +3,13 @@
 usage()
 {
 cat << EOF
-usage: $0 WAKETIME [SLEEPDELAY]
+usage: $0 WAKETIME [SLEEP_DELAY_MINUTES]
 
 Wake up the computer at the given time using the ACPI RTC interface
 Run a command 2 minutes later.
-Optionally go to sleep after a delay.
+Optionally go to sleep after a delay (in minutes).
+
+example: $0 7:00am 20
 EOF
 }
 
@@ -15,7 +17,7 @@ WAKETIME=$1
 if [ "$2" ]
 then
   SLEEP=1
-  SLEEPDELAY=$2
+  SLEEPDELAYMINS=$2
 fi
 
 if [ -z "$WAKETIME" ]
@@ -29,7 +31,7 @@ sudo sh -c 'echo 0 > /sys/class/rtc/rtc0/wakealarm;
 echo `date "+%s" -d "$WAKETIME"` > /sys/class/rtc/rtc0/wakealarm'
 
 # PLAYCMD="banshee --play"
-PLAYCMD="rhythmbox-client --next"
+PLAYCMD="rhythmbox-client --play --next"
 echo "$PLAYCMD" | at $WAKETIME + 2 minutes
 
 # various sleep commands
@@ -40,9 +42,9 @@ SLEEPCMD="dbus-send --print-reply --system --dest=org.freedesktop.UPower /org/fr
 
 if [ "$SLEEP" ]
 then
-  if [ "$SLEEPDELAY" ]
+  if [ "$SLEEPDELAYMINS" ]
   then
-    echo "$SLEEPCMD" | at now + "$SLEEPDELAY"
+    echo "$SLEEPCMD" | at now + $SLEEPDELAYMINS minutes 
   else
     $SLEEPCMD
   fi
